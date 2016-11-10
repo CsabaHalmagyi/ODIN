@@ -12,7 +12,7 @@ $useLDAP = false;
 /*
  * A contact email address that is displayed for users who are not able to login.
  */
-$adminContactEmail = "helpdesk@rdcit.org";
+$adminContactEmail = "";
 
 /*
  * Determines the time the created files (mapping, xml) should be kept on the server (in seconds).
