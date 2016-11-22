@@ -62,9 +62,10 @@ if (count($_POST)!=0) {
         }catch (PDOException $e) {
    			 echo 'Connection failed: ' . $e->getMessage();
 			}
-        $query = "SELECT * FROM user_account WHERE user_name='".trim($_POST['username'])."' AND status_id=1";
+        $query = "SELECT * FROM user_account WHERE user_name= :username AND status_id=1";
         
         $sth = $dbh->prepare($query);
+        $sth->bindParam(':username', $_POST['username']);
         $sth->execute();
         
         $result = $sth->fetch(PDO::FETCH_ASSOC);

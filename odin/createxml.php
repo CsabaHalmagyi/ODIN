@@ -180,10 +180,12 @@ $highestRow = intval($_SESSION['csvmaxrow']);
 					INNER JOIN
 					public.study_event ON study_subject.study_subject_id = study_event.study_subject_id
 					INNER JOIN public.study_event_definition ON  study_event.study_event_definition_id = study_event_definition.study_event_definition_id
-					AND study_subject.label = '".$subjectName."'
-					AND study_event_definition.oc_oid = '".$meta[0]."'";
+					AND study_subject.label = :subjectname AND study_event_definition.oc_oid = :eventoid";
 				
 					$sth = $dbh->prepare($sql);
+					$sth->bindParam(':subjectname',$subjectName);
+					$sth->bindParam(':eventoid',$meta[0]);
+					
 					$sth->execute();
 				
 					$result = $sth->fetch(PDO::FETCH_ASSOC);
