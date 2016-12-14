@@ -100,6 +100,7 @@ try {
 $sheet = $objPHPExcel->getSheet ( 0 );
 $highestRow = $sheet->getHighestRow ();
 $highestColumn = $sheet->getHighestColumn ();
+$highestColNumber = PHPExcel_Cell::columnIndexFromString($highestColumn);
 
 $excelData = array ();
 // Read all rows
@@ -219,6 +220,34 @@ if ($studyParamConf ['SPL_genderRequired'] == 'true') {
 	}
 }
 
+//CHECK IF THE SUBJECT ID IS UNIQUE
+$subjArr = array();
+for($i=1; $i<$highestRow; $i++){
+	if(in_array($excelData[$i][0],$subjArr)){
+		$errors[] = 'Same Subject Id found in multiple rows.';
+		break;
+	}
+	else{
+		$subjArr[] = $excelData[$i][0];
+	}
+	
+}
+
+//CHECK IF HEADER NAMES ARE UNIQUE
+$dataHeader = array();
+
+for($i=6; $i<$highestColNumber; $i++){
+	if(in_array($excelData[0][$i],$dataHeader)){
+		$errors[] = 'Same header name found. Header names must be unique.';
+		break;
+	}
+	else{
+		$dataHeader[] = $excelData[0][$i];
+	}
+}
+
+
+
 // check if errors array is empty
 if (empty ( $errors )) {
 	
@@ -228,14 +257,14 @@ if (empty ( $errors )) {
 	
 	
 	echo '<p><span class="success">There were no errors in the data file.</span><br/>';
-	echo '<a href="importsubjects.php" class="easyui-linkbutton" data-options="iconCls:\'icon-next\'">Continue to import subjects</a></p>';
+	echo '<br/><a href="importsubjects.php" class="easyui-linkbutton" data-options="iconCls:\'icon-next\'">Continue to import subjects</a></p>';
 } else {
 	
 	echo '<p>The following error(s) occured:<br/>';
 	foreach ( $errors as $err ) {
 		echo '<span class="error">' . $err . '</span><br/>';
 	}
-	echo '<a href="index.php" class="easyui-linkbutton" data-options="iconCls:\'icon-back\'">Go back</a></p>';
+	echo '<br/><a href="index.php" class="easyui-linkbutton" data-options="iconCls:\'icon-back\'">Go back</a></p>';
 }
 
 require_once 'includes/html_bottom.inc.php';
